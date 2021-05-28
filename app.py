@@ -1,3 +1,4 @@
+#imports
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from config import Config
@@ -6,15 +7,15 @@ app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 
-import models
+import models #importing model file
 
 
-@app.route('/')
+@app.route('/')#homepage/landing page
 def home():
     return render_template("home.html")
 
 
-@app.route('/recommendation')
+@app.route('/recommendation')#selects random music then recommends to user
 def recommendation():
     return render_template("recommendation.html")
 
