@@ -17,7 +17,8 @@ def home():
 
 @app.route('/recommendation')#selects random music then recommends to user
 def recommendation():
-    return render_template("recommendation.html")
+    results = models.Recommendation.query.all.first_or_404()
+    return render_template("recommendation.html", recommend = results)
 
 
 @app.route('/profile')
