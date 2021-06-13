@@ -1,8 +1,8 @@
 from app import db
 
 RecommendationGenre = db.Table('RecommendationGenre', db.Model.metadata,
-                    db.Column('gId', db.Integer, db.ForeignKey('gId')),
-                    db.Column('rId', db.Integer, db.ForeignKey('rId'))
+                    db.Column('gId', db.Integer, db.ForeignKey('Genre.id')),
+                    db.Column('rId', db.Integer, db.ForeignKey('Recommendation.id'))
                     )
 
 class Recommendation(db.Model):
@@ -13,7 +13,7 @@ class Recommendation(db.Model):
     username = db.Column(db.String())
     description = db.Column(db.String())
 
-    Genre = db.relationship('Genre', secondary=RecommendationGenre, back_populates='Recommendations')
+    genres = db.relationship('Genre', secondary=RecommendationGenre, back_populates='recommendations')
 
 
 class Genre(db.Model):
@@ -22,4 +22,4 @@ class Genre(db.Model):
     genre = db.Column(db.String())
     genreDesc = db.Column(db.String())
 
-    Recommendation = db.relationship('Recommendation', secondary=RecommendationGenre, back_populates='Genres')
+    recommendations = db.relationship('Recommendation', secondary=RecommendationGenre, back_populates='genres')
