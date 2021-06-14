@@ -1,14 +1,18 @@
 {% extends 'layout.html' %}
 {% block content %}
 <body class = "testbg">
-    <h1>home</h1>
+    <h1>Recommendation</h1>
     <div>
         <br>
+          <p>
+            <!-- sort out spotify and youtube links -->
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ recommend.songUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            {{ recommend.name }}
+            Recommended by {{ recommend.username}}
+            {{ recommend.description }}
 
-        {% for item in recommend %}
-          <p>{{ recommend.name }}</p>
-        {% endfor %}
-        <br>
+          </p>
+
         <br>
     </div>
 </body>

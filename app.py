@@ -10,14 +10,16 @@ db = SQLAlchemy(app)
 import models #importing model file
 
 
-@app.route('/')#homepage/landing page
+@app.route('/', methods=["GET", "POST"])#homepage/landing page
 def home():
-    return render_template("home.html")
+
+    return render_template("home.html", recommendation = recommendation)
 
 
-@app.route('/recommendation')#selects random music then recommends to user
-def recommendation():
-    results = models.Recommendation.query.all()
+@app.route('/recommendation/<int:id>')#selects random music then recommends to user
+def recommendation(id):
+    results = models.Recommendation.query.filter_by(id=id).first_or_404()
+
     return render_template("recommendation.html", recommend = results)
 
 
