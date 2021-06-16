@@ -12,8 +12,9 @@ import models #importing model file
 
 @app.route('/', methods=["GET", "POST"])#homepage/landing page
 def home():
-
-    return render_template("home.html", recommendation = recommendation)
+    #randomly pick an id(make) and deliver to /recommendation
+    id_lists = models.Recommendation.query.filter_by(id=id).first_or_404()
+    return render_template("home.html", recommendation = recommendation, recommend = results)
 
 
 @app.route('/recommendation/<int:id>')#selects random music then recommends to user
