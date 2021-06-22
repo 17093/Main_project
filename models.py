@@ -10,7 +10,7 @@ class Recommendation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String())
     songUrl = db.Column(db.String())
-    username = db.Column(db.String())
+    username = db.Column(db.Integer, ForeignKey('User.id'))
     description = db.Column(db.String())
 
     genres = db.relationship('Genre', secondary=RecommendationGenre, back_populates='recommendations')
@@ -23,3 +23,11 @@ class Genre(db.Model):
     genreDesc = db.Column(db.String())
 
     recommendations = db.relationship('Recommendation', secondary=RecommendationGenre, back_populates='genres')
+
+class User(db.Model):
+    __tablename__ = 'User'
+    id = db.Column(db.Integer, primary_key=True)
+    userName = db.Column(db.String())
+    passWord = db.Column(db.String())
+    bio = db.Column(db.String())
+    favGenre = db.Column(db.Integer, ForeignKey('Genre.id'))
