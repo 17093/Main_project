@@ -1,6 +1,7 @@
 #imports
 from flask import Flask, render_template, g, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Table, Column, Integer, ForeignKey
 from config import Config
 import random
 from werkzeug.security import generate_password_hash, check_password_hash

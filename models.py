@@ -10,7 +10,7 @@ class Recommendation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String())
     songUrl = db.Column(db.String())
-    username = db.Column(db.Integer, ForeignKey('User.id'))
+    username = db.Column(db.Integer, db.ForeignKey('User.id'))
     description = db.Column(db.String())
 
     genres = db.relationship('Genre', secondary=RecommendationGenre, back_populates='recommendations')
@@ -30,4 +30,6 @@ class User(db.Model):
     userName = db.Column(db.String())
     passWord = db.Column(db.String())
     bio = db.Column(db.String())
-    favGenre = db.Column(db.Integer, ForeignKey('Genre.id'))
+    favGenre = db.Column(db.Integer, db.ForeignKey('Genre.id'))
+
+    #db.create_all(extend.existing=True)
