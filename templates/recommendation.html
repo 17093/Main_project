@@ -10,7 +10,8 @@
             <br>
             {{ recommend.name }}
             <br>
-            Recommended by {{ recommend.username.name }}
+
+            Recommended by: {% for user in recommend.users %}{{user}},&nbsp;{% endfor %}
             <br>
             {{ recommend.description }}
             <br>
