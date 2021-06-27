@@ -19,14 +19,16 @@ import models #importing model file
 
 @app.route('/', methods=["GET", "POST"])#homepage/landing page
 def home():
-    #randomly pick an id(make) and deliver to /recommendation
     
+    #randomly pick an id(make) and deliver to /recommendation
     #number of songs within database
     id_list = len(models.Recommendation.query.all())
     id_song = random.randint(1,id_list)
     print(id_song)
+    song = models.Recommendation.query.filter_by(id=id_song).first_or_404()
     #id_lists = models.Recommendation.query.filter_by(id=id).first_or_404()
-    return render_template("home.html", id_song = id_song)
+    if song.songType == 1:
+        return render_template("home.html", id_song = id_song)
 
 
 @app.route('/recommendation/<int:id>')#selects random music then recommends to user
@@ -34,10 +36,10 @@ def recommendation(id):
 
     #ADD VIEWCOUNT IF CAN
 
-    results = models.Recommendation.query.filter_by(id=id).first_or_404()
     #number of songs within database
     id_list = len(models.Recommendation.query.all())
     id_song = random.randint(1,id_list)
+    results = models.Recommendation.query.filter_by(id=id).first_or_404()
 
 
     return render_template("recommendation.html", recommend = results, id_song = id_song)

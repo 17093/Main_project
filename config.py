@@ -8,3 +8,4 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = database
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
+    SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
