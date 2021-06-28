@@ -24,11 +24,10 @@ def home():
     #number of songs within database
     id_list = len(models.Recommendation.query.all())
     id_song = random.randint(1,id_list)
-    print(id_song)
-    song = models.Recommendation.query.filter_by(id=id_song).first_or_404()
+    print(id_song) 
     #id_lists = models.Recommendation.query.filter_by(id=id).first_or_404()
-    if song.songType == 1:
-        return render_template("home.html", id_song = id_song)
+    
+    return render_template("home.html", id_song = id_song)
 
 
 @app.route('/recommendation/<int:id>')#selects random music then recommends to user
@@ -38,11 +37,17 @@ def recommendation(id):
 
     #number of songs within database
     id_list = len(models.Recommendation.query.all())
-    id_song = random.randint(1,id_list)
-    results = models.Recommendation.query.filter_by(id=id).first_or_404()
+    id_song = random.randint(1,id_list) #picks random id
+    results = models.Recommendation.query.filter_by(id=id).first_or_404() #results are the informations of the song
+    song = models.Recommendation.query.filter_by(id=id_song).first_or_404() #detecting the type of the song(spotify or youtube link)
+    print (song.songType)
 
-
-    return render_template("recommendation.html", recommend = results, id_song = id_song)
+    if song.songType == 1:
+        type_link = ("youtube")    
+    if song.songType == 2:
+        type_link = ("spotify")    
+       
+    return render_template("recommendation.html", recommend = results, id_song = id_song, type_link = type_link)
 
 
 @app.route('/profile')

@@ -4,6 +4,7 @@ RecommendationGenre = db.Table('RecommendationGenre', db.Model.metadata,
                     db.Column('gId', db.Integer, db.ForeignKey('Genre.id')),
                     db.Column('rId', db.Integer, db.ForeignKey('Recommendation.id'))
                     )
+                    
 
 RecommendationUser = db.Table('RecommendationUser', db.Model.metadata,
                     db.Column('rId', db.Integer, db.ForeignKey('Recommendation.id')),
@@ -16,6 +17,7 @@ class Recommendation(db.Model):
     name = db.Column(db.String())
     songUrl = db.Column(db.String())
     description = db.Column(db.String())
+    songType = db.Column(db.Integer, db.ForeignKey('SongTypes.id'))
 
     genres = db.relationship('Genre', secondary=RecommendationGenre, back_populates='recommendations')
     users = db.relationship('User', secondary=RecommendationUser, back_populates='recommendations')
@@ -29,8 +31,15 @@ class Genre(db.Model):
 
     recommendations = db.relationship('Recommendation', secondary=RecommendationGenre, back_populates='genres')
 
+class SongTypes(db.Model):
+    __tablename__ = 'SongTypes'
+    id = db.Column(db.Integer, primary_key=True)
+    types = db.Column(db.String())
+
+
 class User(db.Model):
     __tablename__ = 'User'
+    
     id = db.Column(db.Integer, primary_key=True)
     userName = db.Column(db.String())
     passWord = db.Column(db.String())
@@ -41,4 +50,7 @@ class User(db.Model):
 
     def __repr__(self):
         return self.userName
-    #db.create_all(extend.existing=True)
+
+
+
+
