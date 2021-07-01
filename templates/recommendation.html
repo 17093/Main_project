@@ -6,11 +6,13 @@
         <br>
           <p>
             <!-- do this / fix this bug -->
-            {%  %}
+            {% if type_link == 1 %}
               <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ recommend.songUrl }}?&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            {%  %}
-              <iframe src="https://open.spotify.com/embed/track/0ZE5BVCy5xVNsI4MaQRzUn" width="50%" height="380" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-            <br>
+            {% endif %}
+            {% if type_link == 2 %}
+              <iframe src="https://open.spotify.com/embed/track/{{ recommend.songUrl }}" width="50%" height="380" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            {% endif %}
+              <br>
             {{ recommend.name }}
             <br>
 

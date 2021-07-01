@@ -38,16 +38,16 @@ def recommendation(id):
     #number of songs within database
     id_list = len(models.Recommendation.query.all())
     id_song = random.randint(1,id_list) #picks random id
-    results = models.Recommendation.query.filter_by(id=id).first_or_404() #results are the informations of the song
     song = models.Recommendation.query.filter_by(id=id_song).first_or_404() #detecting the type of the song(spotify or youtube link)
     print (song.songType)
 
     if song.songType == 1:
-        type_link = ("youtube")    
+        type_link = 1   
     if song.songType == 2:
-        type_link = ("spotify")    
+        type_link = 2
+    print (type_link)
        
-    return render_template("recommendation.html", recommend = results, id_song = id_song, type_link = type_link)
+    return render_template("recommendation.html", recommend = song, id_song = id_song, type_link = type_link)
 
 
 @app.route('/profile')
