@@ -4,8 +4,10 @@
     <h1>Recommendation</h1>
     <div>
         <br>
-          <p>
-            <!-- do this / fix this bug -->
+          <div class="center" >
+            <p class="title">-{{ recommend.name }}-</p>
+            <br>
+            <!-- https://www.labnol.org/internet/youtube-video-background/27933/#:~:text=The%20trick%20is%20that%20you,anywhere%20on%20your%20web%20page. -->
             {% if type_link == 1 %}
               <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ recommend.songUrl }}?&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             {% endif %}
@@ -13,15 +15,13 @@
               <iframe src="https://open.spotify.com/embed/track/{{ recommend.songUrl }}" width="50%" height="380" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
             {% endif %}
               <br>
-            {{ recommend.name }}
-            <br>
 
             Recommended by: {% for user in recommend.users %}{{user}},&nbsp;{% endfor %}
             <br>
             {{ recommend.description }}
             <br>
             <a href="/recommendation/{{ id_song }}" class="button">Recommend me another!</a>
-          </p>
+          </div>
 
         <br>
     </div>
