@@ -2,7 +2,6 @@
 {% block content %}
 <body class = "testbg">
     <h1>Recommendation</h1>
-    <div>
         <br>
           <div class="center" >
             <p class="title">-{{ recommend.name }}-</p>
@@ -15,16 +14,16 @@
               <iframe src="https://open.spotify.com/embed/track/{{ recommend.songUrl }}" width="50%" height="380" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
             {% endif %}
               <br>
-
-            Recommended by: {% for user in recommend.users %}{{user}},&nbsp;{% endfor %}
+            
+            <!-- fix this recommend.users thing -->
+            Recommended by: {% for user in recommend.users %}<a href="/profile/{{ recommend.user }}">{{user}}</a>,&nbsp;{% endfor %}
             <br>
             {{ recommend.description }}
             <br>
-            <a href="/recommendation/{{ id_song }}" class="button">Recommend me another!</a>
+            <a href="/recommendation/{{ recommend.id }}" class="button">Recommend me another!</a>
           </div>
 
         <br>
-    </div>
 </body>
 
 
