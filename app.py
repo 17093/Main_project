@@ -30,7 +30,7 @@ def home():
     return render_template("home.html", id_song = id_song)
 
 
-@app.route('/recommendation/<int:id>')#selects random music then recommends to user
+@app.route('/recommendation/<int:id>', methods=["GET", "POST"])#selects random music then recommends to user
 def recommendation(id):
 
     #ADD VIEWCOUNT IF CAN
@@ -38,8 +38,12 @@ def recommendation(id):
     #number of songs within database
     id_list = len(models.Recommendation.query.all()) #gets how many songs there are to recommend
     id_song = random.randint(1,id_list) #picks random id
+    #https://stackoverflow.com/questions/60805/getting-random-row-through-sqlalchemy
     recommend = models.Recommendation.query.filter_by(id=id_song).first_or_404() #retrivees the randomly picked song/id
-    findwho = models.Recommendation.query.filter_by(users=id_song).first_or_404()
+    #findwho = models.Recommendation.query.filter_by(users=id_song).first_or_404()
+
+    #get id of song (which is id_song), get user id that recommended that song. 
+
     #thing = models.Recommendation.query.filter_by(users=id_song).first_or_404()
     #user_link = models.User.query.filter_by(id=findwho).first_or_404()
 
