@@ -15,7 +15,7 @@
             {% endif %}
               <br>
             
-            <!-- fix this recommend.users thing -->
+            <!-- fix this recommend.users thing. -->
             Recommended by: {% for user in recommend.users %}<a href="/profile/{{ user.id }}">{{user}}</a>,&nbsp;{% endfor %}
             <br>
             {{ recommend.description }}

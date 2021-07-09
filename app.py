@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta
 import urllib
 
-
+#
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
