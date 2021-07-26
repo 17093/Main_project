@@ -22,41 +22,35 @@ def home():
     
     #randomly pick an id(make) and deliver to /recommendation
     #number of songs within database
-    id_list = len(models.Recommendation.query.all())
-    id_song = random.randint(1,id_list)
-    print(id_song)
+    #id_list = len(models.Recommendation.query.all())
+    #id_song = random.randint(1,id_list)
+    #print(id_song)
     #id_lists = models.Recommendation.query.filter_by(id=id).first_or_404()
-    
-    return render_template("home.html", id_song = id_song)
 
+    return render_template("home.html", title="Home")
+
+@app.route('/randomiser')
+def randomiser():
+    #number of songs within database
+    id_list = len(models.Recommendation.query.all())#gets how many songs there are to recommend
+    id_song = random.randint(1,id_list)#picks random id
+    print(id_song) #debug
+
+    return redirect(url_for("recommendation", id=id_song))
 
 @app.route('/recommendation/<int:id>', methods=["GET", "POST"])#selects random music then recommends to user
 def recommendation(id):
 
     #ADD VIEWCOUNT IF CAN
-
-    #number of songs within database (delete comment underneath)
-    #id_list = len(models.Recommendation.query.all()) #gets how many songs there are to recommend
-    #id_song = random.randint(1,id_list) #picks random id
-    
-    #https://stackoverflow.com/questions/60805/getting-random-row-through-sqlalchemy
     recommend = models.Recommendation.query.filter_by(id=id).first_or_404() #retrivees the randomly picked song/id
-    #findwho = models.Recommendation.query.filter_by(users=id_song).first_or_404()
 
-    #get id of song (which is id_song), get user id that recommended that song. 
-
-    #thing = models.Recommendation.query.filter_by(users=id_song).first_or_404()
-    #user_link = models.User.query.filter_by(id=findwho).first_or_404()
-
-
-    #print (user_link)
     #detecting the type of the song(spotify or youtube link)
     if recommend.songType == 1:
         type_link = 1   
     if recommend.songType == 2:
         type_link = 2
        
-    return render_template("recommendation.html", recommend = recommend, type_link = type_link)
+    return render_template("recommendation.html", recommend = recommend, type_link = type_link, title="Recommendation")
 
 
 @app.route('/profile/<int:id>')
@@ -64,7 +58,7 @@ def profile(id):
     #retrieves userinfo such as; bio and name
     userinfo = models.User.query.filter_by(id=id).first_or_404()
 
-    return render_template("profile.html", userinfo = userinfo)
+    return render_template("profile.html", userinfo = userinfo, title="Profile")
 
 
 @app.route('/login')

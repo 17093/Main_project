@@ -1,29 +1,28 @@
 {% extends 'layout.html' %}
 {% block content %}
 <body class = "testbg">
-    <h1>Recommendation</h1>
+  <br>
+    <div class="center" >
+      <p class="title">-{{ recommend.name }}-</p>
+      <br>
+      <!-- https://www.labnol.org/internet/youtube-video-background/27933/#:~:text=The%20trick%20is%20that%20you,anywhere%20on%20your%20web%20page. -->
+      {% if type_link == 1 %}
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ recommend.songUrl }}?&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      {% endif %}
+      {% if type_link == 2 %}
+        <iframe src="https://open.spotify.com/embed/track/{{ recommend.songUrl }}" width="50%" height="380" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      {% endif %}
         <br>
-          <div class="center" >
-            <p class="title">-{{ recommend.name }}-</p>
-            <br>
-            <!-- https://www.labnol.org/internet/youtube-video-background/27933/#:~:text=The%20trick%20is%20that%20you,anywhere%20on%20your%20web%20page. -->
-            {% if type_link == 1 %}
-              <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ recommend.songUrl }}?&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            {% endif %}
-            {% if type_link == 2 %}
-              <iframe src="https://open.spotify.com/embed/track/{{ recommend.songUrl }}" width="50%" height="380" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-            {% endif %}
-              <br>
-            
-            <!-- fix this recommend.users thing. -->
-            Recommended by: {% for user in recommend.users %}<a href="/profile/{{ user.id }}">{{user}}</a>,&nbsp;{% endfor %}
-            <br>
-            {{ recommend.description }}
-            <br>
-            <a href="/recommendation/{{ id_song }}" class="button">Recommend me another!</a>
-          </div>
+      
+      <!-- fix this recommend.users thing. -->
+      Recommended by: {% for user in recommend.users %}<a href="/profile/{{ user.id }}">{{user}}</a>,&nbsp;{% endfor %}
+      <br>
+      {{ recommend.description }}
+      <br>
+      <a href="/randomiser" class="button">Recommend me another!</a>
+    </div>
 
-        <br>
+  <br>
 </body>
 
 
