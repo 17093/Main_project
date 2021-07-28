@@ -8,7 +8,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta
 import urllib
 
-#
+#https://www.youtube.com/watch?v=RHu3mQodroM - Login system help
+#https://www.youtube.com/watch?v=F0UP2jQL_AA - youtube background help
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
