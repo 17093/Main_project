@@ -20,13 +20,6 @@ import models #importing model file
 
 @app.route('/', methods=["GET", "POST"])#homepage/landing page
 def home():
-    
-    #randomly pick an id(make) and deliver to /recommendation
-    #number of songs within database
-    #id_list = len(models.Recommendation.query.all())
-    #id_song = random.randint(1,id_list)
-    #print(id_song)
-    #id_lists = models.Recommendation.query.filter_by(id=id).first_or_404()
 
     return render_template("home.html", title="Home")
 
@@ -54,7 +47,7 @@ def recommendation(id):
     return render_template("recommendation.html", recommend = recommend, type_link = type_link, title="Recommendation")
 
 
-@app.route('/profile/<int:id>')
+@app.route('/profile/<int:id>', methods=["GET", "POST"])
 def profile(id):
     #retrieves userinfo such as; bio and name
     userinfo = models.User.query.filter_by(id=id).first_or_404()
@@ -62,9 +55,21 @@ def profile(id):
     return render_template("profile.html", userinfo = userinfo, title="Profile")
 
 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    #no error
+    error = ""
+    #when html retrieves input it compares input to existing credentials from the database
+    if request.method == 'POST':
+        username = request.form.get("username")
+        password = request.form.get("password")
+        results = models.User.query.filter_by(userName=username , passWord=password).first_or_404() 
+        if results:
+            return redirect(url_for("home"))
+        else:
+            error = "Invalid credentials, please try again"
+
+    return render_template("login.html", title="Login", error=error)
 
 
 @app.route('/signup')

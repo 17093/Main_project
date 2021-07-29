@@ -1,9 +1,16 @@
 {% extends 'layout.html' %}
 {% block content %}
 <body class = "testbg">
-    <h1>Login</h1>
+    <h2>Please enter your credentials</h2>
     <div>
-        b
+        <form action="" method="post">
+            <label>USERNAME</label><br>
+            <input name="username" type="text" id="username"><br>
+            <label>PASSWORD</label><br>
+            <input name="password" type="password" id="password"><br>
+            {{ error }}
+            <input type="submit" value="Submit">
+        </form>
     </div>
 </body>
 
