@@ -58,18 +58,23 @@ def profile(id):
 @app.route('/login', methods=["GET", "POST"])
 def login():
     #no error
-    error = ""
+    error = None
+    if "user" in session:
+        logged = True
+        #return redirect(url_for("home"))
+    session.pop("user", None)
     #when html retrieves input it compares input to existing credentials from the database
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
         results = models.User.query.filter_by(userName=username , passWord=password).first_or_404() 
         if results:
+            session["user"] = username
             return redirect(url_for("home"))
         else:
             error = "Invalid credentials, please try again"
 
-    return render_template("login.html", title="Login", error=error)
+    return render_template("login.html", error = error, title="Login", logged = logged)
 
 
 @app.route('/signup')

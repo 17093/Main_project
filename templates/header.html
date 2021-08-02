@@ -5,6 +5,9 @@
     <div>
         <a href="/" class="button">Home</a>
         <a href="/randomiser" class="button">Recommend Me!</a>
+        {% if logged %}
+            <a href="/login" class="button">Logout</a>
+        {% endif}
         <a href="/login" class="button">Login</a>
 
     </div>

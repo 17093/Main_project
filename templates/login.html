@@ -8,7 +8,9 @@
             <input name="username" type="text" id="username"><br>
             <label>PASSWORD</label><br>
             <input name="password" type="password" id="password"><br>
-            {{ error }}
+            {%if error%}
+                <p class="error"><strong>Error:</strong> {{ error }}</p>
+            {% endif %}
             <input type="submit" value="Submit">
         </form>
     </div>
