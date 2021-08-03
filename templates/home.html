@@ -1,7 +1,9 @@
 {% extends 'layout.html' %}
 {% block content %}
 <body class = "testbg">
-
+    {% if logged %}
+        <h2>Welcome, {{ username }}.</h2>
+    {% endif %}
 </body>
 
 

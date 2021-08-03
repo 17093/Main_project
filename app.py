@@ -20,7 +20,13 @@ import models #importing model file
 
 @app.route('/', methods=["GET", "POST"])#homepage/landing page
 def home():
-
+    username = ""
+    logged = False
+    #if user is in the session, they will be greeted by the welcome text and change login button to logout
+    if "user" in session:
+        username = session["user"]
+        logged = True
+        return render_template("home.html", title="Home", username=username, logged=logged)
     return render_template("home.html", title="Home")
 
 @app.route('/randomiser')
@@ -60,31 +66,33 @@ def login():
     #no error
     error = None
     if "user" in session:
-        logged = True
-        #return redirect(url_for("home"))
-    session.pop("user", None)
+        session.pop("user", None)
     #when html retrieves input it compares input to existing credentials from the database
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
         results = models.User.query.filter_by(userName=username , passWord=password).first_or_404() 
+        #if the credentials match, redirects user to home, if not display error message
         if results:
             session["user"] = username
+            session["user_id"] = results.id
+            print (session["user_id"])
             return redirect(url_for("home"))
         else:
             error = "Invalid credentials, please try again"
 
-    return render_template("login.html", error = error, title="Login", logged = logged)
+    return render_template("login.html", error = error, title="Login")
 
 
 @app.route('/signup')
 def signup():
     return render_template("signup.html")
 
-
+#logging out of session
 @app.route('/logout')
 def logout():
-    return render_template("logout.html")
+    session.pop("user", None)
+    return redirect(url_for("home"))
 
 
 @app.route('/upload')
