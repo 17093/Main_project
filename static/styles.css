@@ -1,17 +1,49 @@
+
+
 .testbg {
-    background-color: rgb(227, 210, 255);
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 500%;
+    height: 100vh;
+    margin: 0;
+	animation: gradient 25s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.container_bar{
+    width: 90%;
+    margin: 0 auto;
+}
+
+header{
+    background: #ffffff;
 
 }
 
 .button{
-    background-color: #6382bb; 
+    background-color: #ffffff; 
     border: none;
-    color: white;
+    color: rgb(54, 54, 54);
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+}
+
+.button:hover{
+    background-color: rgb(43, 43, 43);
+    color: white;
 }
 
 .center{

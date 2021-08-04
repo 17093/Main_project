@@ -1,14 +1,13 @@
-<div class = 'container_bar' style = "width:100%";>
-    <div>
-        <h1>{{ title }}</h1>
-    </div>
-    <div>
-        <a href="/" class="button">Home</a>
-        <a href="/randomiser" class="button">Recommend Me!</a>
-        {% if logged %}
-            <a href="/logout" class="button">Logout</a>
-        {% else %}
-            <a href="/login" class="button">Login</a>
-        {% endif %}
-    </div>
+<div class = 'container_bar'>
+    <header>
+        <div>
+            <a href="/" class="button">Home</a>
+            <a href="/randomiser" class="button">Recommend Me!</a>
+            {% if logged %}
+                <a href="/logout" class="button">Logout</a>
+            {% else %}
+                <a href="/login" class="button">Login</a>
+            {% endif %}
+        </div>
+    </header>
 </div>
