@@ -71,7 +71,7 @@ def login():
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
-        results = models.User.query.filter_by(userName=username , passWord=password).first_or_404() 
+        results = models.User.query.filter_by(userName=username , passWord=password).first() 
         #if the credentials match, redirects user to home, if not display error message
         if results:
             session["user"] = username
@@ -81,7 +81,7 @@ def login():
         else:
             error = "Invalid credentials, please try again"
 
-    return render_template("login.html", error = error, title="Login")
+    return render_template('login.html', error = error, title="Login")
 
 
 @app.route('/signup')

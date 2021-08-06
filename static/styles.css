@@ -8,6 +8,14 @@
 	animation: gradient 25s ease infinite;
 }
 
+.recombg{
+    background: linear-gradient(-45deg, #8f4731, #88244a, #12536b, #116451);
+    background-size: 500%;
+    height: 100vh;
+    margin: 0;
+	animation: gradient 25s ease infinite;
+}
+
 @keyframes gradient {
 	0% {
 		background-position: 0% 50%;
@@ -23,12 +31,9 @@
 .container_bar{
     width: 90%;
     margin: 0 auto;
+    
 }
 
-header{
-    background: #ffffff;
-
-}
 
 .button{
     background-color: #ffffff; 
