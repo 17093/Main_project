@@ -27,6 +27,12 @@
 	}
 }
 
+.left_content{
+    float: left;
+}
+.right_content{
+    float: left;
+}
 
 
 .left_bar{
@@ -50,7 +56,7 @@
     text-decoration: none;
     display: inline-block;
     font-size: 30px;
-    z-index: 2;
+    z-index: 20;
 }
 
 .button:hover{
@@ -69,12 +75,8 @@
 }
 
 .ontop{
-
     text-align: center;
     z-index: 1;
-
-}
-.containter{
 
 }
 
