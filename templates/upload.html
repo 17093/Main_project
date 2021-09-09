@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block content %}
+<body>
+    <div class="ontop">
+
+        <h2 style ="margin:0px">Upload your songs</h2>
+        <br>
+        <form action="" method="post">
+            <label>VIDEO TITLE</label><br>
+            <input name="videotitle" type="text" id="videotitle"><br>
+            <label>URL(youtube/spotify)</label><br>
+            <input name="url" type="text" id="url"><br>
+            <label>DESCRIPTION</label><br>
+            <input name="description" type="text" id="description"><br>
+            URL TYPE: <br><select name="urltype" id="urltype">
+                <option value="1" selected="selected">Youtube</option>
+                <option value="2" selected="selected">Spotify</option>
+            </select>
+            {% if error %}
+                <p class="error"><strong>Error:</strong> {{ error }}</p>
+            {% endif %}
+            <br><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+
+
+{% endblock %}

@@ -1,7 +1,7 @@
 #imports
 from flask import Flask, render_template, g, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Table, Column, Integer, ForeignKey
+from sqlalchemy import Table, Column, Integer, ForeignKey, insert, delete
 from config import Config
 import random
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -95,12 +95,19 @@ def logout():
     return redirect(url_for("home"))
 
 
-@app.route('/upload')
+@app.route('/upload', methods=["GET", "POST"])
 def upload():
+    if request.method == 'POST':
+        title = request.form.get("videotitle")
+        url = request.form.get("url")
+        description = request.form.get("description")
+        songType = request.form.get("urltype")
+        print(title + url+ description + songType)
+
     return render_template("upload.html")
 
 
-@app.route('/delete')
+@app.route('/delete', methods=["GET", "POST"])
 def delete():
     return render_template("delete.html")
 
