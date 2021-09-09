@@ -98,11 +98,16 @@ def logout():
 @app.route('/upload', methods=["GET", "POST"])
 def upload():
     if request.method == 'POST':
-        title = request.form.get("videotitle")
-        url = request.form.get("url")
-        description = request.form.get("description")
-        songType = request.form.get("urltype")
+        #retrieves the form data from the upload url
         print(title + url+ description + songType)
+        rec = models.Recommendation()
+        rec.name = request.form.get("videotitle")
+        rec.songUrl = request.form.get("url")
+        rec.description = request.form.get("description")
+        rec.songType = request.form.get("urltype")
+        #adds and commits the information to the recommendation table
+        db.session.add(rec)
+        db.session.commit()
 
     return render_template("upload.html")
 
