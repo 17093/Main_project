@@ -1,4 +1,5 @@
 #imports
+from urlparse import urlparse
 from flask import Flask, render_template, g, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Integer, ForeignKey, insert, delete
@@ -102,14 +103,43 @@ def upload():
         print(title + url+ description + songType)
         rec = models.Recommendation()
         rec.name = request.form.get("videotitle")
-        rec.songUrl = request.form.get("url")
         rec.description = request.form.get("description")
         rec.songType = request.form.get("urltype")
-        #adds and commits the information to the recommendation table
-        db.session.add(rec)
-        db.session.commit()
 
-    return render_template("upload.html")
+        #https://stackoverflow.com/questions/31170220/python-split-url-into-its-components
+        #https://stackoverflow.com/questions/449775/how-can-i-split-a-url-string-up-into-separate-parts-in-python/449782
+        #https://stackoverflow.com/questions/63093132/regex-string-to-capture-a-tracks-spotify-uri-or-web-link
+
+        if len(rec.name) > 20 or len(rec.description) > 100:
+                error = "Title or Description too long, please shorten to under 50 characters"
+        elif len(rec.name) == 0 or len(rec.description) == 0:
+            error = "Title or Description too short, please enter something into the bar"
+        else:
+
+            parsed = urllib.parse.urlparse("url")
+            #youtube
+            if rec.songType == 1:
+
+            #spotify
+            if rec.songType == 2:
+
+
+            rec.songUrl = urllib.parse.parse_qs(parsed.query).get('v', [None])[0]
+            #return str(v)
+            if urlcut:
+                cursor = get_db().cursor()
+                #gets cursor to input the obtained youtube urls to database
+                insert_url = ("INSERT INTO url (url, desc_name, desc, uploader, filter) VALUES (?, ?, ?, ?, ?);" )
+                cursor.execute(insert_url,(v, desc_name, desc, uploader, tag))
+                get_db().commit()
+                #refreshes the page to empty the input boxes
+                return redirect(url_for('upload'))
+
+                #adds and commits the information to the recommendation table
+                db.session.add(rec)
+                db.session.commit()
+
+    return render_template("upload.html", error = error)
 
 
 @app.route('/delete', methods=["GET", "POST"])
