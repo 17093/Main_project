@@ -1,5 +1,4 @@
 #imports
-from urlparse import urlparse
 from flask import Flask, render_template, g, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, Column, Integer, ForeignKey, insert, delete
@@ -8,6 +7,8 @@ import random
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta
 import urllib
+from urllib.parse import urlparse
+
 
 #https://www.youtube.com/watch?v=RHu3mQodroM - Login system help
 #https://www.youtube.com/watch?v=F0UP2jQL_AA - youtube background help
@@ -99,13 +100,14 @@ def logout():
 @app.route('/upload', methods=["GET", "POST"])
 def upload():
     if request.method == 'POST':
+        error= None
         #retrieves the form data from the upload url
-        print(title + url+ description + songType)
+        
         rec = models.Recommendation()
         rec.name = request.form.get("videotitle")
         rec.description = request.form.get("description")
         rec.songType = request.form.get("urltype")
-
+        print(rec.name +" "+ rec.description +" "+ rec.songType)
         #https://stackoverflow.com/questions/31170220/python-split-url-into-its-components
         #https://stackoverflow.com/questions/449775/how-can-i-split-a-url-string-up-into-separate-parts-in-python/449782
         #https://stackoverflow.com/questions/63093132/regex-string-to-capture-a-tracks-spotify-uri-or-web-link
@@ -116,30 +118,30 @@ def upload():
             error = "Title or Description too short, please enter something into the bar"
         else:
 
-            parsed = urllib.parse.urlparse("url")
+            parsed = urllib.parse.urlparse(request.form.get("url"))
+            print (parsed.path)
             #youtube
-            if rec.songType == 1:
-
+            if rec.songType == "1":
+                rec.songUrl = urllib.parse.parse_qs(parsed.query).get('v', [None])[0]
             #spotify
-            if rec.songType == 2:
+            if rec.songType == "2":
+                
+                rec.songUrl = parsed.path[7:]
+            print (rec.songUrl)
+            
+                
+            
+            #print(rec.name +" "+ rec.songUrl+" "+ rec.description +" "+ rec.songType)
 
-
-            rec.songUrl = urllib.parse.parse_qs(parsed.query).get('v', [None])[0]
             #return str(v)
-            if urlcut:
-                cursor = get_db().cursor()
-                #gets cursor to input the obtained youtube urls to database
-                insert_url = ("INSERT INTO url (url, desc_name, desc, uploader, filter) VALUES (?, ?, ?, ?, ?);" )
-                cursor.execute(insert_url,(v, desc_name, desc, uploader, tag))
-                get_db().commit()
-                #refreshes the page to empty the input boxes
-                return redirect(url_for('upload'))
+            if rec.songUrl:
 
                 #adds and commits the information to the recommendation table
                 db.session.add(rec)
                 db.session.commit()
+        return render_template("upload.html", error = error)
 
-    return render_template("upload.html", error = error)
+    return render_template("upload.html")
 
 
 @app.route('/delete', methods=["GET", "POST"])
