@@ -99,49 +99,56 @@ def logout():
 
 @app.route('/upload', methods=["GET", "POST"])
 def upload():
-    if request.method == 'POST':
-        error= None
-        #retrieves the form data from the upload url
-        
-        rec = models.Recommendation()
-        rec.name = request.form.get("videotitle")
-        rec.description = request.form.get("description")
-        rec.songType = request.form.get("urltype")
-        print(rec.name +" "+ rec.description +" "+ rec.songType)
-        #https://stackoverflow.com/questions/31170220/python-split-url-into-its-components
-        #https://stackoverflow.com/questions/449775/how-can-i-split-a-url-string-up-into-separate-parts-in-python/449782
-        #https://stackoverflow.com/questions/63093132/regex-string-to-capture-a-tracks-spotify-uri-or-web-link
-
-        if len(rec.name) > 20 or len(rec.description) > 100:
-                error = "Title or Description too long, please shorten to under 50 characters"
-        elif len(rec.name) == 0 or len(rec.description) == 0:
-            error = "Title or Description too short, please enter something into the bar"
-        else:
-
-            parsed = urllib.parse.urlparse(request.form.get("url"))
-            print (parsed.path)
-            #youtube
-            if rec.songType == "1":
-                rec.songUrl = urllib.parse.parse_qs(parsed.query).get('v', [None])[0]
-            #spotify
-            if rec.songType == "2":
-                
-                rec.songUrl = parsed.path[7:]
-            print (rec.songUrl)
+    error= None
+    if "user" in session:
+        if request.method == 'POST':
+            id_list = len(models.Recommendation.query.all())#gets how many songs there are in recommendation database
+            #retrieves the form data from the upload url
             
+            rec = models.Recommendation()
+            re_u = models.RecommendationUser
+            re_u.rId = (id_list + 1)
+            re_u.uId = session.get("user_id")
+            rec.name = request.form.get("videotitle")
+            rec.description = request.form.get("description")
+            rec.songType = request.form.get("urltype")
+            print(rec.name +" "+ rec.description +" "+ rec.songType)
+            #https://stackoverflow.com/questions/31170220/python-split-url-into-its-components
+            #https://stackoverflow.com/questions/449775/how-can-i-split-a-url-string-up-into-separate-parts-in-python/449782
+            #https://stackoverflow.com/questions/63093132/regex-string-to-capture-a-tracks-spotify-uri-or-web-link
+
+            if len(rec.name) > 20 or len(rec.description) > 100:
+                    error = "Title or Description too long, please shorten to under 50 characters"
+            elif len(rec.name) == 0 or len(rec.description) == 0:
+                error = "Title or Description too short, please enter something into the bar"
+            else:
+
+                parsed = urllib.parse.urlparse(request.form.get("url"))
+                print (parsed.path)
+                #youtube
+                if rec.songType == "1":
+                    rec.songUrl = urllib.parse.parse_qs(parsed.query).get('v', [None])[0]
+                #spotify
+                if rec.songType == "2":
+                    
+                    rec.songUrl = parsed.path[7:]
+                print (rec.songUrl)
                 
-            
-            #print(rec.name +" "+ rec.songUrl+" "+ rec.description +" "+ rec.songType)
+                    
+                
+                print(rec.name +" "+ rec.songUrl+" "+ rec.description +" "+ rec.songType+" "+str(re_u.rId))
 
-            #return str(v)
-            if rec.songUrl:
+                #return str(v)
+                if rec.songUrl:
 
-                #adds and commits the information to the recommendation table
-                db.session.add(rec)
-                db.session.commit()
-        return render_template("upload.html", error = error)
-
-    return render_template("upload.html")
+                    #adds and commits the information to the recommendation table
+                    db.session.add(rec)
+                    db.session.add(re_u)
+                    db.session.commit()
+            return render_template("upload.html", error = error)
+        return render_template("upload.html")
+    else:
+        return redirect(url_for("login"))
 
 
 @app.route('/delete', methods=["GET", "POST"])
