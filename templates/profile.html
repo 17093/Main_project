@@ -1,9 +1,11 @@
 {% extends 'layout.html' %}
 {% block content %}
 <body class = "testbg">
-    <div>
-        <h2>{{ userinfo.userName }}</h2>
+    <div class = "profile">
+        <h1 class="cap">{{ userinfo.userName }}</h1>
+        <br>
         {{ userinfo.bio }}
+        
     </div>
 </body>
 

@@ -34,6 +34,18 @@
     float: left;
 }
 
+.cap{
+    text-transform: uppercase;
+}
+.profile{
+    margin-right: 50px;
+    margin-top: 20px;
+    padding: 5px;
+    float: right;
+    text-align: right;
+    background-color: #ffffff1f;
+}
+
 
 .left_bar{
     float: left;
