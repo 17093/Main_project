@@ -105,10 +105,12 @@ def upload():
             id_list = len(models.Recommendation.query.all())#gets how many songs there are in recommendation database
             #retrieves the form data from the upload url
             
-            rec = models.Recommendation()
+
             re_u = models.RecommendationUser
             re_u.rId = (id_list + 1)
             re_u.uId = session.get("user_id")
+
+            rec = models.Recommendation()
             rec.name = request.form.get("videotitle")
             rec.description = request.form.get("description")
             rec.songType = request.form.get("urltype")
@@ -117,8 +119,8 @@ def upload():
             #https://stackoverflow.com/questions/449775/how-can-i-split-a-url-string-up-into-separate-parts-in-python/449782
             #https://stackoverflow.com/questions/63093132/regex-string-to-capture-a-tracks-spotify-uri-or-web-link
 
-            if len(rec.name) > 20 or len(rec.description) > 100:
-                    error = "Title or Description too long, please shorten to under 50 characters"
+            if len(rec.name) > 30 or len(rec.description) > 100:
+                error = "Title or Description too long, please shorten to under 50 characters"
             elif len(rec.name) == 0 or len(rec.description) == 0:
                 error = "Title or Description too short, please enter something into the bar"
             else:
@@ -143,7 +145,7 @@ def upload():
 
                     #adds and commits the information to the recommendation table
                     db.session.add(rec)
-                    db.session.add(re_u)
+                    #db.session.add(re_u)
                     db.session.commit()
             return render_template("upload.html", error = error)
         return render_template("upload.html")
