@@ -44,17 +44,29 @@
     background-color: #ffffff1f;
 }
 
-.title{
+.titlelarge{
+    margin-top: 1px;
+    font-size: 100px;
+    text-transform: uppercase;
+    margin-bottom: 1px;
+}
+
+.titletext{
     margin-top: 1px;
     font-size: 60px;
     text-transform: uppercase;
     margin-bottom: 1px;
 }
 
+.title{
+    text-transform: uppercase;
+    font-size: 40px;
+}
+
 
 .left_bar{
     float: left;
-    width: 35%;
+    width: 27%;
     height: 100vh;
     padding: 0px;
     margin: 0;

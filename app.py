@@ -28,8 +28,9 @@ def home():
     if "user" in session:
         username = session["user"]
         logged = True
+        id = session.get("user_id")
         return render_template("home.html", title="Home", username=username, logged=logged)
-    return render_template("home.html", title="Home")
+    return render_template("home.html", title="Home", id=id)
 
 @app.route('/randomiser')
 def randomiser():
@@ -57,6 +58,8 @@ def recommendation(id):
 
 @app.route('/profile/<int:id>', methods=["GET", "POST"])
 def profile(id):
+    if "user" in session:
+        id = session.get("user_id")
     #retrieves userinfo such as; bio and name
     userinfo = models.User.query.filter_by(id=id).first_or_404()
 

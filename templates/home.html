@@ -1,10 +1,12 @@
 {% extends 'layout.html' %}
 {% block content %}
 <body>
+    <div class="profile">
     {% if logged %}
-        <h2 class="profile">Welcome, {{ username }}.</h2>
+        <h2 class="titlelarge">Welcome</h2>
+        <h2 class="titlelarge">{{ username }}.</h2>
     {% endif %}
-
+    </div>
 </body>
 
 
