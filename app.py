@@ -29,8 +29,10 @@ def home():
         username = session["user"]
         logged = True
         id = session.get("user_id")
-        return render_template("home.html", title="Home", username=username, logged=logged)
-    return render_template("home.html", title="Home", id=id)
+        return render_template("home.html", title="Home", username=username, logged=logged, id=id)
+    return render_template("home.html", title="Home", logged=logged)
+
+
 
 @app.route('/randomiser')
 def randomiser():
@@ -43,7 +45,7 @@ def randomiser():
 
 @app.route('/recommendation/<int:id>', methods=["GET", "POST"])#selects random music then recommends to user
 def recommendation(id):
-
+    logged= False
     #ADD VIEWCOUNT IF CAN
     recommend = models.Recommendation.query.filter_by(id=id).first_or_404() #retrivees the randomly picked song/id
 
@@ -52,18 +54,27 @@ def recommendation(id):
         type_link = 1   
     if recommend.songType == 2:
         type_link = 2
+    if "user" in session:
+        username = session["user"]
+        logged = True
+        id = session.get("user_id")
+        return render_template("recommendation.html", recommend = recommend, type_link = type_link, title="Recommendation", username=username, logged=logged, id=id)
        
-    return render_template("recommendation.html", recommend = recommend, type_link = type_link, title="Recommendation")
+    return render_template("recommendation.html", recommend = recommend, type_link = type_link, title="Recommendation", logged=logged)
 
 
 @app.route('/profile/<int:id>', methods=["GET", "POST"])
 def profile(id):
+    logged= False
+    # if not logged in, rediredct to login
     if "user" in session:
         id = session.get("user_id")
+        username = session["user"]
+        logged = True
     #retrieves userinfo such as; bio and name
-    userinfo = models.User.query.filter_by(id=id).first_or_404()
-
-    return render_template("profile.html", userinfo = userinfo, title="Profile")
+        userinfo = models.User.query.filter_by(id=id).first_or_404()
+        return render_template("profile.html", userinfo = userinfo, title="Profile", id=id, username = username, logged=logged)
+    return redirect(url_for("login"))
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -99,11 +110,15 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("home"))
 
-
+#error message for no url make
 @app.route('/upload', methods=["GET", "POST"])
 def upload():
     error= None
+    logged=False
     if "user" in session:
+        id = session.get("user_id")
+        username = session["user"]
+        logged = True
         if request.method == 'POST':
             id_list = len(models.Recommendation.query.all())#gets how many songs there are in recommendation database
             #retrieves the form data from the upload url
@@ -150,8 +165,8 @@ def upload():
                     db.session.add(rec)
                     #db.session.add(re_u)
                     db.session.commit()
-            return render_template("upload.html", error = error)
-        return render_template("upload.html")
+            return render_template("upload.html", error = error, logged=logged, id=id, username = username)
+        return render_template("upload.html", logged=logged, id=id, username = username)
     else:
         return redirect(url_for("login"))
 
@@ -163,6 +178,11 @@ def delete():
 
 @app.route('/about')
 def about():
+    if "user" in session:
+        username = session["user"]
+        logged = True
+        id = session.get("user_id")
+        return render_template("about.html", username=username, logged=logged, id=id)
     return render_template("about.html")
 
 

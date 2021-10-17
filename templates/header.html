@@ -9,7 +9,9 @@
             <a href="/login" class="button">Login</a><br>
         {% endif %}
         <a href="/upload" class="button">Upload</a><br>
+        {% if logged %}
         <a href="/profile/{{ id }}" class="button">Profile</a><br>
+        {% endif %}
         <a href="/about" class="button">About</a><br>
     </div>
 
