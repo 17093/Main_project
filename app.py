@@ -59,7 +59,7 @@ def recommendation(id):
         logged = True
         id = session.get("user_id")
         return render_template("recommendation.html", recommend = recommend, type_link = type_link, title="Recommendation", username=username, logged=logged, id=id)
-       
+    print(recommend)
     return render_template("recommendation.html", recommend = recommend, type_link = type_link, title="Recommendation", logged=logged)
 
 
@@ -75,6 +75,12 @@ def profile(id):
         userinfo = models.User.query.filter_by(id=id).first_or_404()
         return render_template("profile.html", userinfo = userinfo, title="Profile", id=id, username = username, logged=logged)
     return redirect(url_for("login"))
+
+@app.route('/genre/<int:id>', methods=["GET","POST"])
+def genre(id):
+    
+
+    return render_template("genre.html")
 
 
 @app.route('/login', methods=["GET", "POST"])
