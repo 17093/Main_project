@@ -4,7 +4,9 @@
     <div class = "profile">
         <h1 class="titletext">{{ userinfo.userName }}</h1>
         <br>
-        {{ userinfo.bio }}
+        <h3>{{ userinfo.bio }}</h3>
+        Favourite Genres: {% for genre in userinfo.favGenre %}<a href="/genre/{{ genre.id }}">{{ genre }}</a>,&nbsp;{% endfor %}
+        <h2>{{ userinfo.favGenre }}</h2>
         
     </div>
 </body>
