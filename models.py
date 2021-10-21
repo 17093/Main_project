@@ -30,7 +30,9 @@ class Genre(db.Model):
     genreDesc = db.Column(db.String())
 
     recommendations = db.relationship('Recommendation', secondary=RecommendationGenre, back_populates='genres')
-
+    def __repr__(self):
+        return self.genre
+    
 class SongTypes(db.Model):
     __tablename__ = 'SongTypes'
     id = db.Column(db.Integer, primary_key=True)

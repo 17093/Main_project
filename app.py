@@ -72,6 +72,8 @@ def profile(id):
         username = session["user"]
         logged = True
     # retrieves userinfo such as; bio and name
+
+    # html comment<!-- Favourite Genres: {% for genre in userinfo.favGenre %}<a href="/genre/{{ genre.id }}">{{ genre }}</a>,&nbsp;{% endfor %} -->
         userinfo = models.User.query.filter_by(id=id).first_or_404()
         return render_template("profile.html", userinfo = userinfo, title="Profile", username = username, logged=logged)
     return redirect(url_for("login"))
@@ -83,9 +85,11 @@ def genre(id):
         #id = session.get("user_id") - disabled due to id variable overlapping
         username = session["user"]
         logged = True
+        genreinfo = models.Genre.query.filter_by(id=id).first_or_404()
+        return render_template("genre.html", logged=logged, username = username, genreinfo=genreinfo)
+    
     genreinfo = models.Genre.query.filter_by(id=id).first_or_404()
-
-    return render_template("genre.html", logged=logged, username = username, genreinfo=genreinfo)
+    return render_template("genre.html", logged=logged, genreinfo=genreinfo)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -98,9 +102,9 @@ def login():
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
-        results = models.User.query.filter_by(userName=username , passWord=password).first() 
+        results = models.User.query.filter_by(userName=username).first() 
         # if the credentials match, redirects user to home, if not display error message
-        if results:
+        if results and check_password_hash(results.passWord, password):
             session["user"] = username
             session["user_id"] = results.id
             print (session["user_id"])
@@ -113,6 +117,11 @@ def login():
 
 @app.route('/signup')
 def signup():
+    if request.method == 'POST':
+        username = request.form.get("username")
+        password = request.form.get("password")
+        user = models.User(userName=username, passWord = generate_password_hash(password))
+        # commit shit
     return render_template("signup.html")
 
 # logging out of session

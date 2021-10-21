@@ -15,7 +15,9 @@
         <br>
       
       <!-- fix this recommend.users thing. -->
-      Recommended by: {% for user in recommend.users %}<a href="/profile/{{ user.id }}">{{user}}</a>,&nbsp;{% endfor %}
+      Genres: {% for genre in recommend.genres %}<a href="/genre/{{ genre.id }}">{{ genre }}</a>,&nbsp;{% endfor %}
+      <br>
+      Recommended by: {% for user in recommend.users %}<a href="/profile/{{ user.id }}">{{ user }}</a>,&nbsp;{% endfor %}
       <br>
       {{ recommend.description }}
       <br>
