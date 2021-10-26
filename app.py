@@ -115,12 +115,24 @@ def login():
     return render_template('login.html', error = error, title="Login")
 
 
-@app.route('/signup')
+@app.route('/signup', methods=["GET", "POST"])
 def signup():
+    error = None
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
-        user = models.User(userName=username, passWord = generate_password_hash(password))
+        bio = request.form.get("bio")
+        if len(username) <= 0 or len(username) > 20:
+            error = "username invalid. Please enter username with lettercount higher than 0 and lower than 20"
+        elif len(password) <= 0 or len(password) > 20:
+            error = "password invalid. Please enter password with lettercount higher than 0 and lower than 20"
+        elif len(bio) > 50:
+            error = "Bio invalid. Please enter Bio with lettercount lower than 50"
+        else:
+            user = models.User(userName=username, passWord = generate_password_hash(password), bio=bio)
+            db.session.add(user)
+            db.session.commit()
+        return render_template("signup.html", error = error)
         # commit shit
     return render_template("signup.html")
 

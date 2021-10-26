@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block content %}
+<body>
+    <div class="ontop">
+
+        <h2 style ="margin:0px">Please enter your new credentials</h2>
+        <form action="" method="post">
+            <label>USERNAME</label><br>
+            <input name="username" type="text" id="username"><br>
+            <label>PASSWORD</label><br>
+            <input name="password" type="password" id="password"><br>
+            <label>A bit about yourself</label><br>
+            <input name="bio" type="text" id="bio"><br>
+            {% if error %}
+                <p class="error"><strong>Error:</strong> {{ error }}</p>
+            {% endif %}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+
+
+{% endblock %}
