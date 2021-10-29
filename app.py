@@ -54,6 +54,7 @@ def recommendation(id):
         type_link = 1   
     if recommend.songType == 2:
         type_link = 2
+    # if user is in session, fetch their id to view profiles, 
     if "user" in session:
         username = session["user"]
         logged = True
@@ -232,6 +233,7 @@ def upload():
                     
                     
                 else:
+                    # error for invalid url
                     error = "invalid URL"
             return render_template("upload.html", uploaded=uploaded, error = error, logged=logged, id=id, username = username, genre_list=genre_list)
         return render_template("upload.html", logged=logged, id=id, username = username, genre_list=genre_list)
