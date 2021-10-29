@@ -16,11 +16,11 @@ app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 
-import models #importing model file
+import models  # importing model file
 
 # https://jinja.palletsprojects.com/en/3.0.x/templates/
 
-@app.route('/', methods=["GET", "POST"])#homepage/landing page
+@app.route('/', methods=["GET", "POST"])  # homepage/landing page
 def home():
     
     logged = False
@@ -37,17 +37,17 @@ def home():
 @app.route('/randomiser')
 def randomiser():
     # number of songs within database
-    id_list = len(models.Recommendation.query.all())# gets how many songs there are to recommend
-    id_song = random.randint(1,id_list)# picks random id
+    id_list = len(models.Recommendation.query.all())  # gets how many songs there are to recommend
+    id_song = random.randint(1,id_list)  # picks random id
     print(id_song) # debug
 
     return redirect(url_for("recommendation", id=id_song))
 
-@app.route('/recommendation/<int:id>', methods=["GET", "POST"])# selects random music then recommends to user
+@app.route('/recommendation/<int:id>', methods=["GET", "POST"])  # selects random music then recommends to user
 def recommendation(id):
     logged= False
     # ADD VIEWCOUNT IF CAN
-    recommend = models.Recommendation.query.filter_by(id=id).first_or_404() # retrivees the randomly picked song/id
+    recommend = models.Recommendation.query.filter_by(id=id).first_or_404()  # retrivees the randomly picked song/id
 
     # detecting the type of the song(spotify or youtube link)
     if recommend.songType == 1:
@@ -170,7 +170,7 @@ def upload():
         username = session["user"]
         logged = True
         if request.method == 'POST':
-            id_list = len(models.Recommendation.query.all())# gets how many songs there are in recommendation database
+            id_list = len(models.Recommendation.query.all())  # gets how many songs there are in recommendation database
             # retrieves the form data from the upload url
             
             #favGenre=request.form.get("genre_list")
