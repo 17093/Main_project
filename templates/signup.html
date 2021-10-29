@@ -5,15 +5,25 @@
 
         <h2 style ="margin:0px">Please enter your new credentials</h2>
         <form action="" method="post">
+
             <label>USERNAME</label><br>
             <input name="username" type="text" id="username"><br>
+
             <label>PASSWORD</label><br>
             <input name="password" type="password" id="password"><br>
+
             <label>A bit about yourself</label><br>
             <input name="bio" type="text" id="bio"><br>
+
+            <label>Your favourite Genre</label><br>
+            <select name="genre_list" id="genre_list">
+                {% for genre in genre_list %}<option value="{{ genre.id }}">{{ genre.genre }}</option>&nbsp;{% endfor %}
+            </select><br>
+
             {% if error %}
                 <p class="error"><strong>Error:</strong> {{ error }}</p>
             {% endif %}
+            <br>
             <input type="submit" value="Submit">
         </form>
     </div>

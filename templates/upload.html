@@ -6,19 +6,35 @@
         <h2 style ="margin:0px">Upload your songs</h2>
         <br>
         <form action="" method="post">
+
             <label>VIDEO TITLE</label><br>
             <input name="videotitle" type="text" id="videotitle"><br>
+
             <label>URL(youtube/spotify)</label><br>
             <input name="url" type="text" id="url"><br>
+
             <label>DESCRIPTION</label><br>
             <input name="description" type="text" id="description"><br>
-            URL TYPE: <br><select name="urltype" id="urltype">
-                <option value="1" selected="selected">Youtube</option>
+
+            <label>GENRE TYPE:</label><br>
+            <select name="genre_list" id="genre_list">
+                {% for genre in genre_list %}<option value="{{ genre.id }}">{{ genre.genre }}</option>&nbsp;{% endfor %}
+            </select><br>
+
+            URL TYPE:<br> <select name="urltype" id="urltype">
+                
                 <option value="2" selected="selected">Spotify</option>
+                <option value="1" selected="selected">Youtube</option>
             </select>
+
             {% if error %}
                 <p class="error"><strong>Error:</strong> {{ error }}</p>
             {% endif %}
+
+            {% if uploaded %}
+                <p class="error">{{ uploaded }}</p>
+            {% endif %}
+
             <br><br>
             <input type="submit" value="Submit">
         </form>

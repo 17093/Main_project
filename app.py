@@ -22,7 +22,7 @@ import models #importing model file
 
 @app.route('/', methods=["GET", "POST"])#homepage/landing page
 def home():
-    username = ""
+    
     logged = False
     # if user is in the session, they will be greeted by the welcome text and change login button to logout
     if "user" in session:
@@ -43,11 +43,11 @@ def randomiser():
 
     return redirect(url_for("recommendation", id=id_song))
 
-@app.route('/recommendation/<int:id>', methods=["GET", "POST"])#selects random music then recommends to user
+@app.route('/recommendation/<int:id>', methods=["GET", "POST"])# selects random music then recommends to user
 def recommendation(id):
     logged= False
     # ADD VIEWCOUNT IF CAN
-    recommend = models.Recommendation.query.filter_by(id=id).first_or_404() #retrivees the randomly picked song/id
+    recommend = models.Recommendation.query.filter_by(id=id).first_or_404() # retrivees the randomly picked song/id
 
     # detecting the type of the song(spotify or youtube link)
     if recommend.songType == 1:
@@ -68,14 +68,15 @@ def profile(id):
     logged= False
     # if not logged in, rediredct to login
     if "user" in session:
-        #id = session.get("user_id")
         username = session["user"]
         logged = True
-    # retrieves userinfo such as; bio and name
 
-    # html comment<!-- Favourite Genres: {% for genre in userinfo.favGenre %}<a href="/genre/{{ genre.id }}">{{ genre }}</a>,&nbsp;{% endfor %} -->
+    # retrieves userinfo such as; bio and name
         userinfo = models.User.query.filter_by(id=id).first_or_404()
-        return render_template("profile.html", userinfo = userinfo, title="Profile", username = username, logged=logged)
+        genre_id = userinfo.favGenre
+        favGenre = models.Genre.query.filter_by(id=genre_id).first_or_404()
+        return render_template("profile.html", userinfo = userinfo, title="Profile", username = username, logged=logged, favGenre=favGenre, genre_id=genre_id, id=id)
+
     return redirect(url_for("login"))
 
 @app.route('/genre/<int:id>', methods=["GET","POST"])
@@ -85,6 +86,7 @@ def genre(id):
         #id = session.get("user_id") - disabled due to id variable overlapping
         username = session["user"]
         logged = True
+        # fetches all genretypes and translates them to genre.html
         genreinfo = models.Genre.query.filter_by(id=id).first_or_404()
         return render_template("genre.html", logged=logged, username = username, genreinfo=genreinfo)
     
@@ -118,23 +120,37 @@ def login():
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     error = None
+    # gathers all genre types
+    genre_list = models.Genre.query.all()
+    print (genre_list)
+    
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
         bio = request.form.get("bio")
+        favGenre=request.form.get("genre_list")
+
+        # When posted, compares username to already existing usernames
+        check_name = models.User.query.filter_by(userName=(username)).first()
+
+        # parameters for valid credentials
         if len(username) <= 0 or len(username) > 20:
             error = "username invalid. Please enter username with lettercount higher than 0 and lower than 20"
         elif len(password) <= 0 or len(password) > 20:
             error = "password invalid. Please enter password with lettercount higher than 0 and lower than 20"
         elif len(bio) > 50:
             error = "Bio invalid. Please enter Bio with lettercount lower than 50"
+        elif check_name:
+            error = "username already exists, please enter a different username"
+            print (error)
         else:
-            user = models.User(userName=username, passWord = generate_password_hash(password), bio=bio)
+            # commits
+            user = models.User(userName=username, passWord = generate_password_hash(password), bio=bio, favGenre=favGenre)
             db.session.add(user)
             db.session.commit()
-        return render_template("signup.html", error = error)
-        # commit shit
-    return render_template("signup.html")
+        return render_template("signup.html", error = error, genre_list = genre_list)
+
+    return render_template("signup.html", genre_list=genre_list)
 
 # logging out of session
 @app.route('/logout')
@@ -142,11 +158,13 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("home"))
 
-# error message for no url make
 @app.route('/upload', methods=["GET", "POST"])
 def upload():
     error= None
+    uploaded= None
     logged=False
+    genre_list = models.Genre.query.all()
+    # if user is in session, the website will gather the user's id
     if "user" in session:
         id = session.get("user_id")
         username = session["user"]
@@ -155,15 +173,32 @@ def upload():
             id_list = len(models.Recommendation.query.all())# gets how many songs there are in recommendation database
             # retrieves the form data from the upload url
             
+            #favGenre=request.form.get("genre_list")
+            # RecommendationUser
+            #re_u = models.RecommendationUser()
+            #re_u.rId = (id_list + 1)
+            #re_u.uId = session.get("user_id")
 
-            re_u = models.RecommendationUser
-            re_u.rId = (id_list + 1)
-            re_u.uId = session.get("user_id")
+            # RecommendationGenre
+            #re_g = models.RecommendationGenre()
+            #re_g.gId = request.form.get("genre_list")
+            #re_g.rId = (id_list + 1)
 
+            # Recommendation
             rec = models.Recommendation()
             rec.name = request.form.get("videotitle")
             rec.description = request.form.get("description")
             rec.songType = request.form.get("urltype")
+
+            #re_id = (id_list + 1)
+            re_user = models.User.query.get(session.get("user_id"))
+            re_genre = models.Genre.query.get(request.form.get("genre_list"))
+                
+
+            rec.users.append(re_user)
+            rec.genres.append(re_genre)
+            
+
             print(rec.name +" "+ rec.description +" "+ rec.songType)
             # https://stackoverflow.com/questions/31170220/python-split-url-into-its-components
             # https://stackoverflow.com/questions/449775/how-can-i-split-a-url-string-up-into-separate-parts-in-python/449782
@@ -176,31 +211,30 @@ def upload():
             else:
 
                 parsed = urllib.parse.urlparse(request.form.get("url"))
-                # print (parsed.path)
+                #print (parsed.path)
                 # youtube
                 if rec.songType == "1":
                     rec.songUrl = urllib.parse.parse_qs(parsed.query).get('v', [None])[0]
                 # spotify
                 if rec.songType == "2":
                     
-                    rec.songUrl = parsed.path[7:]
-                # print (rec.songUrl)
-                
-                    
-                
-                # print(rec.name +" "+ rec.songUrl+" "+ rec.description +" "+ rec.songType+" "+str(re_u.rId))
+                    rec.songUrl = parsed.path[7:]  
 
+                #print(rec.name +" "+ rec.songUrl+" "+ rec.description +" "+ rec.songType+" "+str(re_u.rId))
                 # return str(v)
+
                 if rec.songUrl:
 
                     # adds and commits the information to the recommendation table
-                    db.session.add(rec)
-                    # db.session.add(re_u)
+                    db.session.add(db.session.merge(rec))
                     db.session.commit()
+                    uploaded = "Uploaded :D"
+                    
+                    
                 else:
                     error = "invalid URL"
-            return render_template("upload.html", error = error, logged=logged, id=id, username = username)
-        return render_template("upload.html", logged=logged, id=id, username = username)
+            return render_template("upload.html", uploaded=uploaded, error = error, logged=logged, id=id, username = username, genre_list=genre_list)
+        return render_template("upload.html", logged=logged, id=id, username = username, genre_list=genre_list)
     else:
         return redirect(url_for("login"))
 
@@ -209,9 +243,10 @@ def upload():
 def delete():
     return render_template("delete.html")
 
-
+# about page of the website
 @app.route('/about')
 def about():
+    # if user is in session, the website will gather the user's id
     if "user" in session:
         username = session["user"]
         logged = True

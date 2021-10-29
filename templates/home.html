@@ -1,8 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
 <body>
-    <div class="profile">
     {% if logged %}
+        <div class="profile">
         <h2 class="titlelarge">Welcome</h2>
         <h2 class="titlelarge">{{ username }}.</h2>
     {% endif %}
